@@ -1,0 +1,9 @@
+{
+    "manifest_version": 2,
+    "name": "League of Chrome",
+    "version": "1.0",
+
+    "browser_action": {
+        "default_popup": "popup.html"
+    }
+}
