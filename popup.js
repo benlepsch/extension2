@@ -61,6 +61,7 @@ function runGame() {
                 player.startJump();
             }
             player.update();
+            game.update();
             game.draw();
             player.draw();
         } else {

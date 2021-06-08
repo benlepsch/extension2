@@ -31,6 +31,10 @@ class Game {
         this.ground_color = ground_color;
         this.sky_color = sky_color;
         this.obstacles = [];
+        this.lastObstacle = 0;
+        this.obstacleTimer = 0;
+        this.obstacleUpperTick = 15;
+        this.obstacleLowerTick = 10;
         this.running = false;
     }
 
@@ -43,12 +47,61 @@ class Game {
         this.running = false;
     }
 
+    // generate/move obstackles/clouds
+    update() {
+        let current = new Date().getTime();
+        let dt = Math.round((current - this.lastObstacle)/1000);
+
+        if (dt >= this.obstacleTimer) {
+            this.lastObstacle = current;
+            this.obstacles.push(new Obstacle());
+            this.obstacleTimer = Math.round(Math.random() * this.obstacleUpperTick) + this.obstacleLowerTick;
+        }
+
+        for (let i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i].update();
+            if (this.obstacles[i].remove) {
+                this.obstacles.splice(i, 1);
+                i --;
+            }
+        }
+    }
+
     draw() {
         ctx.fillStyle = this.sky_color;
-        ctx.lineWidth = 1;
         ctx.fillRect(0, 0, canvas.width, this.ground_level);
 
         ctx.fillStyle = this.ground_color;
         ctx.fillRect(0, this.ground_level, canvas.width, canvas.height);
+
+        for (let i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i].draw();
+        }
+    }
+}
+
+class Obstacle {
+    constructor() {
+        this.color = '#c7c6bf';
+        this.height = Math.random() * 100;
+        this.width = 18;
+        this.speed = 5;
+        this.left = canvas.width;
+        this.remove = false;
+    }
+
+    update() {
+        console.log('left: ' + this.left);
+        this.left -= this.speed;
+        if (this.left + this.width <= 0) {
+            this.remove = true;
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = new Game().sky_color;
+        ctx.fillRect(this.left + 5, new Game().ground_level - this.height, this.left + this.width + 5, new Game().ground_level);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.left, new Game().ground_level - this.height, this.left + this.width, new Game().ground_level);
     }
 }
