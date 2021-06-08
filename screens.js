@@ -33,8 +33,8 @@ class Game {
         this.obstacles = [];
         this.lastObstacle = 0;
         this.obstacleTimer = 0;
-        this.obstacleUpperTick = 15;
-        this.obstacleLowerTick = 10;
+        this.obstacleUpperTick = 3;
+        this.obstacleLowerTick = 1;
         this.running = false;
     }
 
@@ -83,7 +83,7 @@ class Game {
 class Obstacle {
     constructor() {
         this.color = '#c7c6bf';
-        this.height = Math.random() * 100;
+        this.height = Math.random() * 70;
         this.width = 18;
         this.speed = 5;
         this.left = canvas.width;
@@ -99,9 +99,7 @@ class Obstacle {
     }
 
     draw() {
-        ctx.fillStyle = new Game().sky_color;
-        ctx.fillRect(this.left + 5, new Game().ground_level - this.height, this.left + this.width + 5, new Game().ground_level);
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.left, new Game().ground_level - this.height, this.left + this.width, new Game().ground_level);
+        ctx.fillRect(this.left, new Game().ground_level - this.height, this.width, this.height);
     }
 }
