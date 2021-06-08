@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
     "name": "bean run",
-    "description": "A fun bean game to play in browser\nv0.3.1: restart game with game.lose() console command",
-    "version": "0.3.1",
+    "description": "A fun bean game to play in browser\nv0.3.2: cant run off edges of the screen",
+    "version": "0.3.2",
 
     "browser_action": {
         "default_icon": "bean_icon.png",

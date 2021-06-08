@@ -53,6 +53,13 @@ class Player {
         if (this.top + this.height >= new Game().ground_level && this.accelY >= 0) {
             this.top = new Game().ground_level - this.height;
         }
+
+        if (this.left <= 0) {
+            this.left = 0;
+        }
+        if (this.left + this.width >= canvas.width) {
+            this.left = canvas.width - this.width;
+        }
     }
 
     // draw onto the canvas
