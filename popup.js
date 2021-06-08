@@ -11,6 +11,27 @@ canvas.height = 200;
 document.body.appendChild(canvas);
 const ctx = canvas.getContext('2d');
 
+var mouse_x = 0, mouse_y = 0;
+
+var game = new Game();
+var player = new Player();
+var menu = new Menu();
+
+$(document).mousemove(function(event) {
+    // -8 to adjust for canvas padding
+    mouse_x = event.pageX - 8;
+    mouse_y = event.pageY - 8;
+    console.log('mouse_x: ' + mouse_x + '\tmouse_y: ' + mouse_y);
+});
+
+// for interaction with menu, ignore if the game is being played
+canvas.onmousedown = () => {
+    if (!game.running) {
+        if (menu.checkMouseOverStart(mouse_x, mouse_y)) {
+            game.running = true;
+        }
+    }
+}
 
 
 /* main loop */
@@ -32,21 +53,20 @@ function runGame() {
         
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // draw game
-        let inp = checkKeys();
-        p.updateAccel(inp[0]);
-        if (inp[1]) {
-            p.startJump();
+        // draw
+        if (game.running) {
+            let inp = checkKeys();
+            player.updateAccel(inp[0]);
+            if (inp[1]) {
+                player.startJump();
+            }
+            player.update();
+            game.draw();
+            player.draw();
+        } else {
+            menu.draw();
         }
-        p.update();
-        g.draw();
-        p.draw();
 	}
 }
-
-
-/* start game */
-let p = new Player();
-let g = new Game();
 
 startGame(60);
