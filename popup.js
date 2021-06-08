@@ -14,14 +14,13 @@ const ctx = canvas.getContext('2d');
 var mouse_x = 0, mouse_y = 0;
 
 var game = new Game();
-var player = new Player();
+var player = null;
 var menu = new Menu();
 
 $(document).mousemove(function(event) {
     // -8 to adjust for canvas padding
     mouse_x = event.pageX - 8;
     mouse_y = event.pageY - 8;
-    console.log('mouse_x: ' + mouse_x + '\tmouse_y: ' + mouse_y);
 });
 
 // for interaction with menu, ignore if the game is being played
@@ -29,6 +28,7 @@ canvas.onmousedown = () => {
     if (!game.running) {
         if (menu.checkMouseOverStart(mouse_x, mouse_y)) {
             game.running = true;
+            game.begin();
         }
     }
 }

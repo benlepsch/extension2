@@ -34,6 +34,15 @@ class Game {
         this.running = false;
     }
 
+    begin() {
+        player = new Player();
+    }
+
+    lose() {
+        player = null;
+        this.running = false;
+    }
+
     draw() {
         ctx.fillStyle = this.sky_color;
         ctx.lineWidth = 1;
