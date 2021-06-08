@@ -1,9 +1,11 @@
 {
     "manifest_version": 2,
-    "name": "League of Chrome",
-    "version": "1.0",
+    "name": "bean run",
+    "description": "A fun bean game to play in browser\nv0.1: empty canvas",
+    "version": "0.1",
 
     "browser_action": {
+        "default_icon": "bean.png",
         "default_popup": "popup.html"
     }
 }
