@@ -36,15 +36,20 @@ class Game {
         this.obstacleUpperTick = 3;
         this.obstacleLowerTick = 1;
         this.running = false;
+        this.player = null;
     }
 
     begin() {
-        player = new Player();
+        this.player = new Player();
     }
 
+    // game over!
     lose() {
-        player = null;
+        this.player = null;
         this.running = false;
+        this.obstacleTimer = 0;
+        this.lastObstacle = 0;
+        this.obstacles = [];
     }
 
     // generate/move obstackles/clouds
@@ -67,6 +72,34 @@ class Game {
         }
     }
 
+    // detect player collision with obstacles
+    checkCollision() {
+        let collide = false;
+        let player_left = this.player.left;
+        let player_right = player_left + this.player.width;
+        let player_bottom = this.player.top + this.player.height;
+
+        for (let i = 0; i < this.obstacles.length; i++) {
+            let obst = this.obstacles[i].corners();
+
+            if (player_bottom < obst['top']) {
+                continue;
+            }
+
+            if ((player_right >= obst['left'] && player_left <= obst['left']) ||
+                (player_left <= obst['right'] && player_right >= obst['right']) ||
+                (player_left <= obst['left'] && player_right >= obst['right'])) {
+                
+                collide = true;
+            }
+        }
+
+        if (collide) {
+            this.lose();
+        }
+    }
+
+    // draw background + obstacles
     draw() {
         ctx.fillStyle = this.sky_color;
         ctx.fillRect(0, 0, canvas.width, this.ground_level);
@@ -80,16 +113,27 @@ class Game {
     }
 }
 
+// walls? lightsabers? what are these
 class Obstacle {
     constructor() {
         this.color = '#c7c6bf';
-        this.height = Math.random() * 70;
+        this.height = Math.random() * 20 + 40;
         this.width = 18;
         this.speed = 5;
         this.left = canvas.width;
         this.remove = false;
     }
 
+    // for collision checking with player
+    corners() {
+        return {
+            'left': this.left, 
+            'top': new Game().ground_level - this.height, 
+            'right': this.left + this.width
+        };
+    }
+
+    // move position
     update() {
         console.log('left: ' + this.left);
         this.left -= this.speed;
@@ -98,6 +142,7 @@ class Obstacle {
         }
     }
 
+    // draw
     draw() {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.left, new Game().ground_level - this.height, this.width, this.height);

@@ -14,7 +14,6 @@ const ctx = canvas.getContext('2d');
 var mouse_x = 0, mouse_y = 0;
 
 var game = new Game();
-var player = null;
 var menu = new Menu();
 
 $(document).mousemove(function(event) {
@@ -56,14 +55,17 @@ function runGame() {
         // draw
         if (game.running) {
             let inp = checkKeys();
-            player.updateAccel(inp[0]);
+            game.player.updateAccel(inp[0]);
             if (inp[1]) {
-                player.startJump();
+                game.player.startJump();
             }
-            player.update();
+            game.player.update();
             game.update();
+            game.checkCollision();
             game.draw();
-            player.draw();
+            if (game.running) {
+                game.player.draw();
+            }
         } else {
             menu.draw();
         }
